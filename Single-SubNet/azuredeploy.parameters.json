@@ -1,0 +1,73 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminUsername": {
+      "value": "Kensjero"
+    },
+    "adminPassword": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/874c624a-899b-45be-99a9-ba8822674908/resourceGroups/Sentia_Deployment/providers/Microsoft.KeyVault/vaults/KensjeroVault"
+        },
+        "secretName": "LocalAdminPassword"
+      }
+    },
+
+    "storageAccountName": {
+      "value": "sentiapolicystore"
+    },
+
+    "blobEncryptionEnabled": {
+      "value": true
+    },
+
+    "fileEncryptionEnabled": {
+      "value": true
+    },
+
+    "storageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "dnsLabelPrefix": {
+      "value": "kensjerosentiapolicy"
+    },
+
+    "virtualNetworkName": {
+      "value": "sentiaVirtualNetwork"
+    },
+
+    "nicName": {
+      "value": "sentiatestnic"
+    },
+
+    "publicIPAddressName": {
+      "value": "sentiaPolicyPIP"
+    },
+
+    "addressPrefix": {
+      "value": "172.16.0.0/12"
+    },
+
+    "subnet1Name": {
+      "value": "sentiaSubnet"
+    },
+
+    "subnet1Prefix": {
+      "value": "172.16.0.0/12"
+    },
+
+    "windowsOSVersion": {
+      "value": "2016-Datacenter"
+    },
+
+    "vmName": {
+      "value": "Sentia-SRV"
+    },
+
+    "location": {
+      "value": "West Europe"
+    }
+  }
+}
+
