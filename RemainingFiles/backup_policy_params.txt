@@ -1,0 +1,11 @@
+{
+  "parameters": {
+    "listOfResourceTypesAllowed": {
+      "value": [
+      "Microsoft.Compute", 
+      "Microsoft.Storage", 
+      "Microsoft.Network"
+      ]
+    }
+  }
+}

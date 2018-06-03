@@ -1,0 +1,57 @@
+Debugging log:
+
+* Fixed double subnet entry in azuredeploy.parameters.json at line #36
+* Fixed unexpected comma in azuredeploy.json at line #91
+* Converted variables to parameters for re-usability
+* Changed authentication method by using a local file containing a secure-string password
+* Putting the login into a variable to prevent information from popping up on the screen
+* Created logging to keep track of script structure and error handling
+* Updated script sctructure for easier-reading
+ 
+[06/02/18 13:31:48]: InvalidRequestContent : The request content was invalid and could not be deserialized: 'Could not find member 'listOfResourceTypesAllowed' on object of type 'PolicyParameterDefinition'. Path 'properties.parameters.parameters.listOfResourceTypesAllowed', line 39, position 37.'.
+[06/02/18 13:31:48]: Cannot bind argument to parameter 'PolicyDefinition' because it is null.
+
+* Fixed above error by educating myself in the policies structure. This is what testing does to you.
+* Fixed all variables in script due to heavy adjustments
+
+# We are certain the policy works since we had to add the keyvault provider in order to add the keyvault functionality
+
+* I had a really hard time creating the KeyVault inside the script since there would be an error constantly generated, with no documentation. It seems like a bug...
+[06/02/18 21:01:55]: 'vaultName' does not match expected pattern '^[a-zA-Z0-9-]{3,24}$'.
+
+Which in truned caused:
+[06/02/18 21:01:56]: The remote name could not be resolved: 'kensjero_testvault.vault.azure.net'
+
+This line DOES work to create the vault outside of the script:
+New-AzureRmKeyVault -Name "KensjeroVault" -Location 'West Europe' -ResourceGroupName Sentia_Deployment -EnabledForTemplateDeployment
+
+After declaring following variables, it also works:
+$VName = "KensjeroVault"
+$VLocation = "West Europe"
+$VRGName = "Sentia_Deployment"
+New-AzureRmKeyVault -Name $VName -Location $VLocation -ResourceGroupName $VRGName -EnabledForTemplateDeployment
+
+After implementing it into the script, it doesn't work anymore. We've tried creatingit outside ot the TRY, to no avail. Instead we've created the vault prior...
+
+EDIT: The vault name contained an underscore. Powershell didn't like this.....
+
+++++++++++
+
+Spend 2 hours fixing the f****ng JSON files since there was a parameter error which Visual Studio didn't show. Powershell kept stating that the template was invalid, and i should check the internal info.
+Fortunately I fixed this..
+
+The magic announcement:
+
+VERBOSE: 10:28:43 PM - Template is valid.
+
+EDIT2: It seems to not be able to deploy the 2nd subnet. I've tried for 2 days to fix this, including research etc.... without succes. 
+
+We also had to adjust the policy inorder for our VM and PIP to deploy.
+
+We made 1 deployment with a KeyVault and a deployment without a KeyVault and enforcing type-restriction policy.
+
+We did more research to the multi-subnet issue, couldnt find any information. Analyzed other templates on GitHub, no useful information. We are beaten.
+
+-- It seems if the policy is turned into 'allow' instead of 'deny', it won't properly register it during deployment...
+
+
